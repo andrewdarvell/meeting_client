@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:orientation="vertical"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent"
+			  android:weightSum="1">
+
+	<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="fill_parent"
+			android:layout_height="154dp"
+			android:layout_gravity="center"
+			android:layout_weight="1"
+			android:weightSum="1">
+
+		<EditText
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="textPersonName"
+				android:ems="10"
+				android:id="@+id/loginText"
+				android:layout_gravity="center_horizontal"
+				android:hint="@string/login_title"
+				android:textSize="25dp"/>
+
+		<EditText
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="textPassword"
+				android:ems="10"
+				android:id="@+id/passText"
+				android:hint="@string/pass_title"
+				android:textSize="25dp"/>
+
+		<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_weight="0.03">
+
+
+			<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/register_b_title"
+					android:id="@+id/button"
+					android:layout_weight="1"
+					android:textSize="25dp"/>
+
+			<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/login_b_title"
+					android:id="@+id/button2"
+					android:layout_weight="1"
+					android:textSize="25dp"/>
+
+		</LinearLayout>
+		<ProgressBar
+				android:id="@+id/progressBar1"
+				style="?android:attr/progressBarStyleLarge"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_below="@+id/editText1"
+				android:layout_centerHorizontal="true"
+				android:layout_marginTop="24dp" />
+	</LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">meeting_client</string>
+	<string name="schedules_title">Ближайшие события</string>
+	<string name="login_title">Login</string>
+	<string name="pass_title">Pass</string>
+
+
+	<string name="register_b_title">register</string>
+	<string name="login_b_title">login</string>
+</resources>
