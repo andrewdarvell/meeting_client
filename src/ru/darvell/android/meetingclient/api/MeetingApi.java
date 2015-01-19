@@ -3,17 +3,13 @@ package ru.darvell.android.meetingclient.api;
 import android.util.Log;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-import java.net.URL;
 import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * Основной класс для работы с сервером
@@ -24,16 +20,20 @@ public class MeetingApi {
 
 	public static Map<String, String> prepareLogin(String login, String pass){
 		Map<String, String> params = new HashMap<String, String>();
-		params.put("login","dwdw");
-		params.put("pass","fsdfsf");
+
+		params.put("api_key",Conf.apiKey);
+		params.put("method","secur");
+		params.put("action","getKey");
+		params.put("login",login);
+		params.put("pass",pass);
 		return params;
 	}
 
-	static Map<String, String> parseParams(String str){
+	public static Map<String, String> parseParams(String str){
 		Map<String, String> result = new HashMap<String, String>();
 		try {
 			String rawPars[] = str.split(";");
-			for (int i = 0; i < rawPars.length; i++) {
+			for (int i = 0; i < rawPars.length-1; i++) {
 				String keyValue[] = rawPars[i].split(":");
 				result.put(keyValue[0], keyValue[1]);
 			}
@@ -69,5 +69,7 @@ public class MeetingApi {
 			return null;
 		}
 	}
+
+//	curl --data "action=getKey&login=ron&pass=1&api_key=bcbe3365e6ac95ea2c0343a2395834dd" http://env-5340213.jelastic.regruhosting.ru/meeting/secur
 
 }

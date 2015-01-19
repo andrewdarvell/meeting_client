@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import ru.darvell.android.meetingclient.api.Conf;
 import ru.darvell.android.meetingclient.api.MeetingApi;
 
 import java.util.Map;
@@ -68,7 +69,11 @@ public class AuthActivity extends Activity {
 			if (s == null) {
 				Log.i("debug", "Error!!!");
 			}else {
-				Log.i("debug", s);
+				Map<String, String> response = MeetingApi.parseParams(s);
+				if (response.get("code").equals("0")){
+					Conf.sessKey = response.get("main");
+					Log.i("debug", Conf.sessKey);
+				}
 			}
 
 		}
