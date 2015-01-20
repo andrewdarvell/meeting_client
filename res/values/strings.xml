@@ -6,6 +6,10 @@
 	<string name="pass_title">Pass</string>
 
 
-	<string name="register_b_title">register</string>
-	<string name="login_b_title">login</string>
+	<string name="register_b_title">Register</string>
+	<string name="login_b_title">Login</string>
+	<string name="success_login">Удачный вход, бро</string>
+	<string name="email_title">Email</string>
+	<string name="cancel">Cancel</string>
+	<string name="remind_title">Remind?</string>
 </resources>

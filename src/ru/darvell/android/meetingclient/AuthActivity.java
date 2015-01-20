@@ -1,13 +1,14 @@
 package ru.darvell.android.meetingclient;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import ru.darvell.android.meetingclient.api.Conf;
 import ru.darvell.android.meetingclient.api.MeetingApi;
 
@@ -20,25 +21,35 @@ public class AuthActivity extends Activity {
 
 	MyTask mt;
 
+	EditText loginText;
+	EditText passText;
+	ProgressBar progressBar;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.authlayout);
 
-//		if (android.os.Build.VERSION.SDK_INT > 9) {
-//			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//			StrictMode.setThreadPolicy(policy);
-//		}
-
 		Button button = (Button) findViewById(R.id.button);
 		Button button2 = (Button) findViewById(R.id.button2);
+		progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+		progressBar.setVisibility(View.INVISIBLE);
 
-		final EditText loginText = (EditText) findViewById(R.id.loginText);
-		final EditText passText = (EditText) findViewById(R.id.passText);
+		loginText = (EditText) findViewById(R.id.loginText);
+		passText = (EditText) findViewById(R.id.passText);
 
+		button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showRegister();
+			}
+		});
+
+		//Действие на кнопку логин
 		button2.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				setVisiblePB(true);
 				doLogin(loginText.getText().toString(), passText.getText().toString());
 			}
 		});
@@ -49,7 +60,27 @@ public class AuthActivity extends Activity {
 		mt.execute(MeetingApi.prepareLogin(login, pass));
 	}
 
+	//Вызывает основную форму приложения
+	void showMain(){
+		Intent intent = new Intent(this, MainActivity.class);
+		startActivity(intent);
+	}
 
+	//Видимость прогресс-бара
+	void showRegister(){
+		Intent intent = new Intent(this, RegisterActivity.class);
+		startActivity(intent);
+	}
+
+	void setVisiblePB(boolean visible){
+		if (visible){
+			progressBar.setVisibility(View.VISIBLE);
+		}else {
+			progressBar.setVisibility(View.INVISIBLE);
+		}
+	}
+
+	//Класс посылает запрос в другом потоке. Не GUI
 	class MyTask extends AsyncTask<Map<String,String>, Integer, String> {
 		@Override
 		protected String doInBackground(Map<String, String>... params) {
@@ -65,17 +96,25 @@ public class AuthActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(String s) {
-			super.onPostExecute(s);
+			setVisiblePB(false);
 			if (s == null) {
 				Log.i("debug", "Error!!!");
 			}else {
 				Map<String, String> response = MeetingApi.parseParams(s);
 				if (response.get("code").equals("0")){
 					Conf.sessKey = response.get("main");
+					Conf.login = loginText.getText().toString();
+					Conf.pass = passText.getText().toString();
+					Conf.exist = true;
 					Log.i("debug", Conf.sessKey);
+					showMain();
 				}
 			}
+		}
 
+		@Override
+		protected void onProgressUpdate(Integer... values) {
+			progressBar.setProgress(values[0]);
 		}
 	}
 
