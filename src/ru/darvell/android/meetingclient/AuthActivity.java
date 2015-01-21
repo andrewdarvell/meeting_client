@@ -35,8 +35,8 @@ public class AuthActivity extends Activity {
 		progressBar = (ProgressBar) findViewById(R.id.progressBar1);
 		progressBar.setVisibility(View.INVISIBLE);
 
-		loginText = (EditText) findViewById(R.id.loginText);
-		passText = (EditText) findViewById(R.id.passText);
+		loginText = (EditText) findViewById(R.id.t_login_auth);
+		passText = (EditText) findViewById(R.id.t_pass_auth);
 
 		button.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -117,6 +117,5 @@ public class AuthActivity extends Activity {
 			progressBar.setProgress(values[0]);
 		}
 	}
-
 
 }

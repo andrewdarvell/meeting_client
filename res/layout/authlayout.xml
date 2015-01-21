@@ -20,7 +20,7 @@
 				android:layout_height="wrap_content"
 				android:inputType="textPersonName"
 				android:ems="10"
-				android:id="@+id/loginText"
+				android:id="@+id/t_login_auth"
 				android:layout_gravity="center_horizontal"
 				android:hint="@string/login_title"
 				android:textSize="25dp"
@@ -31,7 +31,7 @@
 				android:layout_height="wrap_content"
 				android:inputType="textPassword"
 				android:ems="10"
-				android:id="@+id/passText"
+				android:id="@+id/t_pass_auth"
 				android:hint="@string/pass_title"
 				android:textSize="25dp"
 				android:layout_marginBottom="5dp"/>

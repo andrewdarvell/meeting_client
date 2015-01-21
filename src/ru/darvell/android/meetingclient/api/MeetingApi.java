@@ -4,6 +4,7 @@ import android.util.Log;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -28,6 +29,18 @@ public class MeetingApi {
 		params.put("pass",pass);
 		return params;
 	}
+
+	public static Map<String, String> preapareRegister(String login, String pass, String email){
+		Map<String, String> params = new HashMap<String, String>();
+
+		params.put("method", "users");
+		params.put("action", "register");
+		params.put("login", login);
+		params.put("pass", pass);
+		params.put("email", email);
+		return params;
+	}
+
 
 	public static Map<String, String> parseParams(String str){
 		Map<String, String> result = new HashMap<String, String>();
@@ -62,8 +75,30 @@ public class MeetingApi {
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			String responseRaw = httpclient.execute(httpPost, new BasicResponseHandler());
 
+
 			return responseRaw;
 
+		}catch (Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static String sendGet(Map<String, String> params){
+		try{
+			HttpClient httpClient = new DefaultHttpClient();
+			StringBuilder stringBuilder = new StringBuilder();
+			Set keys = params.keySet();
+			Iterator<String> iterator = keys.iterator();
+			while (iterator.hasNext()){
+				String tmpStr = iterator.next();
+				if (!tmpStr.equals("method")) {
+					stringBuilder.append(tmpStr + "=" + params.get(tmpStr) + "&");
+				}
+			}
+			HttpGet httpGet = new HttpGet(Conf.apiUrl+params.get("method")+"?"+stringBuilder.toString());
+			String responseRaw = httpClient.execute(httpGet, new BasicResponseHandler());
+			return responseRaw;
 		}catch (Exception e){
 			e.printStackTrace();
 			return null;
