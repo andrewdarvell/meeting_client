@@ -1,12 +1,15 @@
 package ru.darvell.android.meetingclient;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import ru.darvell.android.meetingclient.api.MeetingApi;
 
 import java.util.Map;
@@ -21,6 +24,7 @@ public class RegisterActivity extends Activity {
 	EditText loginText;
 	EditText passText;
 	EditText emailText;
+	Context context;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,7 @@ public class RegisterActivity extends Activity {
 		loginText = (EditText) findViewById(R.id.t_login_register);
 		passText = (EditText) findViewById(R.id.t_pass_register);
 		emailText = (EditText) findViewById(R.id.t_email_register);
+		context = this;
 
 		registerBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -51,14 +56,26 @@ public class RegisterActivity extends Activity {
 
 	void doRegister(){
 		MyTask myTask  = new MyTask();
-		myTask.execute(MeetingApi.preapareRegister(loginText.getText().toString(),
-													passText.getText().toString(),
-													emailText.getText().toString()
-													));
+		if ((!loginText.getText().toString().equals(""))||
+				(!passText.getText().toString().equals(""))||
+				(!emailText.getText().toString().equals(""))) {
+
+			myTask.execute(MeetingApi.preapareRegister(loginText.getText().toString(),
+					passText.getText().toString(),
+					emailText.getText().toString()
+					));
+		}else {
+			Toast.makeText(context, "Empty fields", Toast.LENGTH_LONG).show();
+		}
+
 	}
 
 	void cancelRegister(){
 
+	}
+
+	void showLoginForm(){
+		startActivity(new Intent(context, AuthActivity.class));
 	}
 
 	class MyTask extends AsyncTask<Map<String,String>, Integer, String>{
@@ -77,13 +94,20 @@ public class RegisterActivity extends Activity {
 		@Override
 		protected void onPostExecute(String s) {
 			if (s == null) {
+				Toast.makeText(context, "Problem with connection?", Toast.LENGTH_LONG).show();
 				Log.i("debug", "Error!!!");
 			}else {
 				Map<String, String> response = MeetingApi.parseParams(s);
 				if (response.get("code").equals("0")){
+					Toast.makeText(context, "Success registered", Toast.LENGTH_LONG).show();
+					showLoginForm();
 					Log.i("debug", "Success Register");
+				}else if (response.get("code").equals("-15")){
+					Toast.makeText(context, "Login already ...", Toast.LENGTH_LONG).show();
+				}else if (response.get("code").equals("-16")){
+					Toast.makeText(context, "Email already ...", Toast.LENGTH_LONG).show();
 				}else{
-					Log.e("debug", s);
+					Toast.makeText(context, "I can't register you", Toast.LENGTH_LONG).show();
 				}
 			}
 		}
